@@ -2,26 +2,7 @@
 
 // Cette page a pour fonction d'afficher une liste de films sortis en Blueray
 
-// Contient la date courante 
-$current_date = date("d/m/Y");
-
-
-// Contient le titre de la page 
-$title = "Ma liste de films du " . $current_date;
-
-// Contient les données de films 
-$data = array ();
-
-if (($handle = fopen("films.csv", "r")) !== FALSE) {
-    while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
-        // var_dump($row);
-        array_push($data, $row);
-        // $data[] = $row;
-    }
-    fclose($handle);
-}
-
-// var_dump($data);
+include("functions.php");
 
 ?>
 
@@ -33,6 +14,8 @@ if (($handle = fopen("films.csv", "r")) !== FALSE) {
     <title>
         <?php echo $title; ?> </title>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <script src="js/jquery-3.1.1.min.js"> </script>
+    <script src="js/bootstrap.min.js"></script> 
 </head>
 
 <body>
@@ -54,12 +37,25 @@ if (($handle = fopen("films.csv", "r")) !== FALSE) {
         <?php if (count($data)>1) : ?>
         <h2>
             <?php printf("J'ai actuellement %s films à regarder : ", count($data)-1); ?> </h2>
+
+<div class ="form-group"> 
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdowntypes" data-toggle="dropdown"> Types de films  <span class="caret"> </span> </button>
+        <ul class="dropdown-menu"role="menu" aria-labelledby="dropdowntypes">
+             <?php show_select_types_de_film(); ?>
+        </ul>
+    </div>
+</div>
+
         <ul>
+             
             <?php
     for ($i=0; $i<count($data); $i++) : 
     if ($i>0) : ?>
-                <li>
-                    <?php echo $data[$i][1]; ?> </li>
+   
+    <?php show_row($data[$i]); ?>
+                <!--<li>
+                    <?php echo $data[$i][1]; ?> </li>-->
                 <?php endif; ?>
                 <?php endfor; ?>
         </ul>
