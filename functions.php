@@ -21,10 +21,10 @@ if (($handle = fopen("films.csv", "r")) !== FALSE) {
 // var_dump($data);
 
 // Fonction destinée à afficher un élément de la liste
-function show_row($row) {
-    $film = new Film($row);
+function show_row($film) {
+    // $film = new Film($row);
     // echo "<li>" . $row[1] . "</li>";
-    echo "<li><a href='details.php?film=".$film->id."'>" . $film . "</a></li>";
+    echo "<tr><td><a href='details.php?film=".$film->id."'>" . $film->title . "</a> </td> <td> " . $film->type. "</td></tr>";
 }
 
 // Fonction affichant un select des types de films
@@ -34,7 +34,7 @@ function show_select_types_de_film() {
     foreach ($data as $row) {
         if (!in_array($row[3], $types) && $row[3] !="Type") {
             array_push($types, $row[3]);
-            echo "<li role='type'><a role='menuitem' href='#'>".$row[3] . '</a></li>';
+            echo "<li role='type'><a role='menuitem' href='index.php?type=".urlencode($row[3])."'>".$row[3] . '</a></li>';
         }
     }
 }
@@ -84,6 +84,27 @@ class Finder {
             }
         }
         Return NULL;
+    }
+    public function FindByType ($type) {
+        $found = array();
+        if (!empty($type)){
+            foreach($this->_data as $row){
+     
+                if ($row[3] == $type){
+                     $found[] = new Film($row);
+                }
+
+            }
+        }
+        else {
+            foreach ($this->_data as $row){
+                if ($row[1] != "Title")
+                {
+                    $found[] = new Film ($row);
+                }
+            }
+        }
+return $found;
     }
 }
 

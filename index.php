@@ -3,6 +3,10 @@
 // Cette page a pour fonction d'afficher une liste de films sortis en Blueray
 
 include("functions.php");
+$type = urldecode($_GET["type"]);
+
+$finder = new Finder($data);
+$found = $finder->findByType($type);
 
 ?>
 
@@ -31,9 +35,11 @@ include("functions.php");
         </div>
     </nav>
     <div class="container">
+        <div class="jumbotron">
         <h1>
             <?php echo $title; ?> </h1>
             <p> Voici ma liste de films à regarder. Merci de ne pas télécharger illégalement. Pour plus d'informations, attendre la suite du cours </p>
+            </div> 
         <?php if (count($data)>1) : ?>
         <h2>
             <?php printf("J'ai actuellement %s films à regarder : ", count($data)-1); ?> </h2>
@@ -47,18 +53,18 @@ include("functions.php");
     </div>
 </div>
 
-        <ul>
+        <table class="table table-striped">
              
             <?php
-    for ($i=0; $i<count($data); $i++) : 
-    if ($i>0) : ?>
+    for ($i=0; $i<count($found); $i++) : 
+    // if ($i>0) : ?>
    
-    <?php show_row($data[$i]); ?>
+    <?php show_row($found[$i]); ?>
                 <!--<li>
                     <?php echo $data[$i][1]; ?> </li>-->
-                <?php endif; ?>
+                <?php // endif; ?>
                 <?php endfor; ?>
-        </ul>
+        </table>
         <?php else : ?>
         <h2> Je n'ai pas de films à visionner actuellement. </h2>
         <?php endif; ?>
